@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissingSizeFinder", "MissingSizeFinder\MissingSizeFinder.csproj", "{DD90214B-BBEE-49DC-B2CB-190ED76FCA23}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbz.UIComponents", "..\DanbooruBrowser\dbz.UIComponents\dbz.UIComponents.csproj", "{34567EAA-4C03-409D-991E-7E03D01AC987}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{DD90214B-BBEE-49DC-B2CB-190ED76FCA23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD90214B-BBEE-49DC-B2CB-190ED76FCA23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD90214B-BBEE-49DC-B2CB-190ED76FCA23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34567EAA-4C03-409D-991E-7E03D01AC987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34567EAA-4C03-409D-991E-7E03D01AC987}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34567EAA-4C03-409D-991E-7E03D01AC987}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34567EAA-4C03-409D-991E-7E03D01AC987}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

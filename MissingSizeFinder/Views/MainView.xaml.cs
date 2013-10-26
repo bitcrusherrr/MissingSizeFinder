@@ -12,17 +12,24 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MissingSizeFinder.ViewModels;
 
-namespace MissingSizeFinder
+namespace MissingSizeFinder.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainViewVM _vm;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            _vm = new MainViewVM();
+
+            DataContext = _vm;
         }
     }
 }

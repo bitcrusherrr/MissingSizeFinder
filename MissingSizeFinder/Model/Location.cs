@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,13 +16,29 @@ namespace MissingSizeFinder.Model
         private string _path;
         private ObservableCollection<Location> _children;
 
-        public ObservableCollection<Location> Children { get { return _children; } }
+        internal ObservableCollection<Location> Children { get { return _children; } }
+        internal string Name { get; set; }
+
 
         internal Location(string path)
         {
             _children = new ObservableCollection<Location>();
 
             _path = path;
+
+            Name = path;
+
+            foreach (var item in Directory.GetDirectories(path))
+            {
+                try
+                {
+                    _children.Add(new Location(item));
+                }
+                catch
+                {
+                    //Do nothing, its probably protected folder. We will deal with this later
+                }
+            }
         }
     }
 }
