@@ -19,9 +19,9 @@ namespace MissingSizeFinder.Model
         private ObservableCollection<Location> _children;
 
         public ObservableCollection<Location> Children { get { return _children; } }
-        public string Name { get; set; }
-        public string Size { get; set; }
-        public double RawSize { get; set; } //Raw size in bytes
+        public string Name { get; set; } //Name of the folder
+        public string Size { get; set; } //Size string for GUI parts
+        public double RawSize { get; set; } //Raw size in bytes, will get used later for graphical display
         private BackgroundWorker _childLoader;
         private BackgroundWorker _sizeCalculator;
 
@@ -84,7 +84,7 @@ namespace MissingSizeFinder.Model
 
             RaisePropertyChanged("Size");
 
-            if(LocationFinishedCalculating != null)
+            if (LocationFinishedCalculating != null)
                 LocationFinishedCalculating(null, null);
         }
 
@@ -96,11 +96,11 @@ namespace MissingSizeFinder.Model
             foreach (var child in _children)
                 RawSize += child.RawSize;
 
-            //Grab size for all file elements in the folder
-            DirectoryInfo directoryIfo = new DirectoryInfo(_path);
-
             try
             {
+                //Grab size for all file elements in the folder
+                DirectoryInfo directoryIfo = new DirectoryInfo(_path);
+
                 foreach (var file in directoryIfo.EnumerateFiles())
                     RawSize += file.Length;
             }
@@ -125,12 +125,12 @@ namespace MissingSizeFinder.Model
             foreach (var item in e.Result as List<Location>)
             {
                 _children.Add(item);
-
+ 
                 if (string.IsNullOrEmpty(item.Size))
                     item.LocationFinishedCalculating += item_LocationFinishedCalculating;
                 else
                     item_LocationFinishedCalculating(null, null);
-            } 
+            }
 
             //Fire off size calculation routine if we have no children
             //Otherwise this will be handled by a later event
