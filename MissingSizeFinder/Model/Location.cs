@@ -113,14 +113,10 @@ namespace MissingSizeFinder.Model
         void item_LocationFinishedCalculating(object sender, EventArgs e)
         {
             //Check if all child elemnts have loaded and fire off size calculator if so
-            try
+            lock (_sizeCalculator)//This bit can be raised concurrently and in this cases _sizeCalculator can report wrong busy status.
             {
                 if (_children.FirstOrDefault(x => x.Size == null) == null && !_sizeCalculator.IsBusy)
                     _sizeCalculator.RunWorkerAsync();
-            }
-            catch
-            {
-                //Odd thread behavior! Investigate
             }
         }
 
