@@ -6,23 +6,42 @@ using System.Threading.Tasks;
 using MissingSizeFinder.Model;
 using System.Collections.ObjectModel;
 using dbz.UIComponents;
+using System.IO;
+using System.Windows.Forms;
 
 namespace MissingSizeFinder.ViewModels
 {
-    internal class MainViewVM : BaseIObservable
+    public class MainViewVM : BaseIObservable
     {
 
         private ObservableCollection<Location> _locationList;
-        internal ObservableCollection<Location> MainLocationList { get { return _locationList; } }
+        public ObservableCollection<Location> MainLocationList { get { return _locationList; } }
 
-        internal MainViewVM()
+        private DelegateCommand _rootSelectCommand;
+        public DelegateCommand RootSelectCommand { get { return _rootSelectCommand; } }
+
+        public MainViewVM()
         {
             _locationList = new ObservableCollection<Location>();
 
+            _rootSelectCommand = new DelegateCommand
+            {
+                CanExecuteDelegate = x => true,
+                ExecuteDelegate = x => SelectBaseFolder()
+            };
+        }
 
-            _locationList.Add(new Location(@"C:\"));
+        private void SelectBaseFolder()
+        {
+            FolderBrowserDialog browser = new FolderBrowserDialog();
+            DialogResult result = browser.ShowDialog();
 
-            RaisePropertyChanged("MainLocationList");
+            if (result == DialogResult.OK)
+            {
+                _locationList.Clear();
+
+                _locationList.Add(new Location(browser.SelectedPath));
+            }
         }
     }
 }
