@@ -13,7 +13,7 @@ namespace MissingSizeFinder.Model
     /// <summary>
     /// Base location class, it can be either folder or a drive, shouldnt matter as ong as it has child/parent and we can walk the three
     /// </summary>
-    public class Location : BaseIObservable
+    public class Location : INotifyPropertyChanged
     {
         private string _path;
         private ObservableCollection<Location> _children;
@@ -36,6 +36,10 @@ namespace MissingSizeFinder.Model
 
             Name = _path.Substring(_path.LastIndexOf(@"\") + 1);
 
+            _sizeCalculator = new BackgroundWorker();
+            _sizeCalculator.DoWork += _sizeCalculator_DoWork;
+            _sizeCalculator.RunWorkerCompleted += _sizeCalculator_RunWorkerCompleted;
+
             _childLoader = new BackgroundWorker();
             _childLoader.DoWork += _childLoader_DoWork;
             _childLoader.RunWorkerCompleted += _childLoader_RunWorkerCompleted;
@@ -51,9 +55,6 @@ namespace MissingSizeFinder.Model
 			                event + use the size value. Once all children are loaded size value will not be empty!
 
              */
-            _sizeCalculator = new BackgroundWorker();
-            _sizeCalculator.DoWork += _sizeCalculator_DoWork;
-            _sizeCalculator.RunWorkerCompleted += _sizeCalculator_RunWorkerCompleted;
 
             Size = null; //Work out in background worker
         }
@@ -124,12 +125,15 @@ namespace MissingSizeFinder.Model
         {
             foreach (var item in e.Result as List<Location>)
             {
-                _children.Add(item);
- 
-                if (string.IsNullOrEmpty(item.Size))
-                    item.LocationFinishedCalculating += item_LocationFinishedCalculating;
-                else
-                    item_LocationFinishedCalculating(null, null);
+                lock (_children)
+                {
+                    _children.Add(item);
+
+                    if (string.IsNullOrEmpty(item.Size))
+                        item.LocationFinishedCalculating += item_LocationFinishedCalculating;
+                    else
+                        item_LocationFinishedCalculating(null, null);
+                }
             }
 
             //Fire off size calculation routine if we have no children
@@ -165,6 +169,16 @@ namespace MissingSizeFinder.Model
             }
 
             e.Result = children;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void RaisePropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
         }
     }
 }

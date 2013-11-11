@@ -8,10 +8,11 @@ using System.Collections.ObjectModel;
 using dbz.UIComponents;
 using System.IO;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace MissingSizeFinder.ViewModels
 {
-    public class MainViewVM : BaseIObservable
+    public class MainViewVM : INotifyPropertyChanged
     {
 
         private ObservableCollection<Location> _locationList;
@@ -41,6 +42,16 @@ namespace MissingSizeFinder.ViewModels
                 _locationList.Clear();
 
                 _locationList.Add(new Location(browser.SelectedPath));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void RaisePropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
             }
         }
     }
